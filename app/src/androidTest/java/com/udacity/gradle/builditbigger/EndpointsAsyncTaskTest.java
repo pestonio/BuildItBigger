@@ -6,6 +6,7 @@ import org.junit.Test;
  * Created by Peter Stone on 31/01/2017.
  */
 public class EndpointsAsyncTaskTest {
+//    MainActivity.EndpointsAsyncTask asyncTask = new MainActivity.EndpointsAsyncTask();
 
     @Test
     public void AsyncTaskTesting() throws Exception{
