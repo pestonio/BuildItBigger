@@ -26,7 +26,7 @@ public class MyClass {
             "You\'ll never believe who I bumped into on my way to the eye doctor! Everybody!"
     };
 
-    public String sayHi(){
+    public String newJoke(){
         return jokes[new Random().nextInt(jokes.length)];
     }
 }

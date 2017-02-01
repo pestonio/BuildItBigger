@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.MyClass;
 import com.example.myandroidlibrary.ALJoke;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -29,11 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
 
-
-//        MyClass myClass = new MyClass();
-//        Toast.makeText(this,myClass.sayHi(),Toast.LENGTH_LONG).show();
     }
 
 
@@ -60,22 +52,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        MyClass myClass = new MyClass();
-        String currentJoke = myClass.sayHi();
-        Log.v("LOG", currentJoke);
-        Intent jokeIntent = new Intent(this, ALJoke.class);
-        jokeIntent.putExtra("Jokes", currentJoke);
-        startActivity(jokeIntent);
+        new EndpointsAsyncTask().execute(this);
 
-//        Toast.makeText(this, myClass.sayHi(), Toast.LENGTH_LONG).show();
     }
-    class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+
+    class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
         private MyApi myApiService = null;
         private Context context;
 
         @Override
-        protected String doInBackground(Pair<Context, String>... params) {
-            if(myApiService == null) {  // Only do this once
+        protected String doInBackground(Context... params) {
+            if (myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
                         // options for running against local devappserver
@@ -89,15 +76,15 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                 // end options for devappserver
+                builder.setApplicationName("FinalProject");
 
                 myApiService = builder.build();
             }
 
-            context = params[0].first;
-            String name = params[0].second;
+//            context = params[0];
 
             try {
-                return myApiService.sayHi(name).execute().getData();
+                return myApiService.tellJoke().execute().getData();
             } catch (IOException e) {
                 return e.getMessage();
             }
@@ -105,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+            Intent jokeIntent = new Intent(getApplicationContext(), ALJoke.class);
+            jokeIntent.putExtra("Jokes", result);
+            startActivity(jokeIntent);
         }
     }
 
