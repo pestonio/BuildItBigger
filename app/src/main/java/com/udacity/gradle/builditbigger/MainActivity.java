@@ -6,16 +6,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.myandroidlibrary.ALJoke;
 
 
 public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
+    private ProgressBar spinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        spinner = (ProgressBar) findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
     }
 
     @Override
@@ -23,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
         Intent jokeIntent = new Intent(getApplicationContext(), ALJoke.class);
         jokeIntent.putExtra("Jokes", result);
         startActivity(jokeIntent);
+        spinner.setVisibility(View.GONE);
 
     }
 
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskCompleted {
 
     public void tellJoke(View view) {
         new EndpointsAsyncTask(this).execute();
+        spinner.setVisibility(View.VISIBLE);
     }
 }
 
