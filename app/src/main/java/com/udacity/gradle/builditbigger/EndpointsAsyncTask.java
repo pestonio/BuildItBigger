@@ -15,7 +15,7 @@ import java.io.IOException;
  * Created by Peter Stone on 02/02/2017.
  */
 
-class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
         private OnTaskCompleted listener;
 
